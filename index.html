@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>To Do List</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>Minha To Do List</h1>
+
+    <input
+    type="text"
+    id="inputTarefa"
+    placeholder="Digite uma tarefa"
+>
+
+    <button type="button" id="btnAdicionar">
+    Adicionar
+</button>
+
+    <!-- FILTROS -->
+    <button onclick="mudarFiltro('todas')">
+        Todas
+    </button>
+
+    <button onclick="mudarFiltro('pendentes')">
+        Pendentes
+    </button>
+
+    <button onclick="mudarFiltro('concluidas')">
+        Concluídas
+    </button>
+
+    <!-- LISTA -->
+    <ul id="listaTarefas"></ul>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
