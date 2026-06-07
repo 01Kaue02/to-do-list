@@ -4,6 +4,7 @@ console.log("SCRIPT CARREGOU");
 const input = document.getElementById("inputTarefa");
 const botao = document.getElementById("btnAdicionar");
 const lista = document.getElementById("listaTarefas");
+const prioridade = document.getElementById("selectPrioridade");
 
 // FILTRO ATUAL
 let filtroAtual = "todas";
@@ -33,11 +34,13 @@ async function adicionarTarefa() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                titulo: titulo
+                titulo: titulo,
+                prioridade: prioridade.value
             })
         });
 
         input.value = "";
+        prioridade.value = "Media";
 
         buscarTarefas();
 
@@ -98,6 +101,15 @@ function renderizar(tarefas) {
     tarefasFiltradas.forEach((tarefa) => {
 
         const li = document.createElement("li");
+        if (tarefa.prioridade === "Alta") {
+    li.classList.add("prioridade-alta");
+}
+else if (tarefa.prioridade === "Media") {
+    li.classList.add("prioridade-media");
+}
+else if (tarefa.prioridade === "Baixa") {
+    li.classList.add("prioridade-baixa");
+}
 
         const span = document.createElement("span");
         span.textContent = tarefa.titulo;
@@ -116,6 +128,19 @@ function renderizar(tarefas) {
         } else {
             data.textContent = "Sem data";
         }
+        const prioridadeTexto = document.createElement("small");
+
+prioridadeTexto.textContent =
+    " Prioridade: " + tarefa.prioridade;
+    if (tarefa.prioridade === "Alta") {
+    prioridadeTexto.classList.add("alta");
+}
+else if (tarefa.prioridade === "Media") {
+    prioridadeTexto.classList.add("media");
+}
+else if (tarefa.prioridade === "Baixa") {
+    prioridadeTexto.classList.add("baixa");
+}
 
         // BOTÃO CONCLUIR
         const btnCheck = document.createElement("button");
@@ -155,7 +180,8 @@ btnEditar.addEventListener("click", async () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                titulo: novoTitulo
+                titulo: novoTitulo,
+                prioridade: prioridade.value
             })
         }
     );
@@ -183,6 +209,7 @@ btnExcluir.addEventListener("click", async () => {
         li.appendChild(btnCheck);
         li.appendChild(btnEditar);
         li.appendChild(span);
+        li.appendChild(prioridadeTexto);
         li.appendChild(document.createElement("br"));
         li.appendChild(data);
         li.appendChild(btnExcluir);

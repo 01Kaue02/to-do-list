@@ -43,12 +43,15 @@ app.post("/tarefas", async (req, res) => {
 
     try {
 
-        const { titulo } = req.body;
+        const { titulo,prioridade  } = req.body;
 
         await sql.query(`
-            INSERT INTO tarefas (titulo, concluida)
-            VALUES ('${titulo}', 0)
-        `);
+    INSERT INTO tarefas
+    (titulo, concluida, prioridade)
+
+    VALUES
+    ('${titulo}', 0, '${prioridade}')
+`);
 
         res.json({
             mensagem: "Tarefa salva!"

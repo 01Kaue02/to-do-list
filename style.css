@@ -30,3 +30,41 @@ border-radius: 5px;
     text-decoration: line-through;
     color: gray;
 }
+.alta {
+    color: red;
+    font-weight: bold;
+}
+
+.media {
+    color: orange;
+    font-weight: bold;
+}
+
+.baixa {
+    color: green;
+    font-weight: bold;
+}
+#listaTarefas li {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+    list-style: none;
+}
+
+/* Alta */
+.prioridade-alta {
+    background-color: #ffdddd;
+    border-left: 8px solid red;
+}
+
+/* Média */
+.prioridade-media {
+    background-color: #fff4d6;
+    border-left: 8px solid orange;
+}
+
+/* Baixa */
+.prioridade-baixa {
+    background-color: #ddffdd;
+    border-left: 8px solid green;
+}
