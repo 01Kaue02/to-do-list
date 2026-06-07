@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>To Do List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha To Do List</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,38 +13,90 @@
 
     <h1>Minha To Do List</h1>
 
-    <input
-    type="text"
-    id="inputTarefa"
-    placeholder="Digite uma tarefa"
->
-    <select id="selectPrioridade">
-    <option value="Alta">Alta</option>
-    <option value="Media">Média</option>
-    <option value="Baixa">Baixa</option>
-</select> 
+    <!-- FORMULÁRIO -->
+    <div class="formulario">
 
-    <button type="button" id="btnAdicionar">
-    Adicionar
+        <input
+            type="text"
+            id="inputTarefa"
+            placeholder="Digite uma tarefa">
+
+        <input
+            type="date"
+            id="dataTarefa">
+
+        <select id="selectPrioridade">
+            <option value="Alta">Alta</option>
+            <option value="Media" selected>Média</option>
+            <option value="Baixa">Baixa</option>
+        </select>
+
+        <button
+            type="button"
+            id="btnAdicionar">
+            Adicionar
+        </button>
+
+    </div><input
+    type="text"
+    id="pesquisaTarefa"
+    placeholder="Pesquisar tarefa...">
+    <input
+    type="date"
+    id="filtroData">
+
+<button onclick="filtrarPorData()">
+    Buscar por Data
 </button>
 
+<button onclick="limparFiltroData()">
+    Todas as Datas
+</button>
     <!-- FILTROS -->
-    <button onclick="mudarFiltro('todas')">
-        Todas
-    </button>
 
-    <button onclick="mudarFiltro('pendentes')">
-        Pendentes
-    </button>
+    <div class="filtros">
 
-    <button onclick="mudarFiltro('concluidas')">
-        Concluídas
-    </button>
+        <button onclick="mudarFiltro('todas')">
+            Todas
+        </button>
 
-    <!-- LISTA -->
+        <button onclick="mudarFiltro('pendentes')">
+            Pendentes
+        </button>
+
+        <button onclick="mudarFiltro('concluidas')">
+            Concluídas
+        </button>
+
+    </div>
+
+    <!-- ESTATÍSTICAS -->
+
+    <div id="estatisticas">
+
+        <p>
+            📋 Total:
+            <span id="total">0</span>
+        </p>
+
+        <p>
+            ⏳ Pendentes:
+            <span id="pendentes">0</span>
+        </p>
+
+        <p>
+            ✅ Concluídas:
+            <span id="concluidas">0</span>
+        </p>
+
+    </div>
+
+    <!-- LISTA DE TAREFAS -->
+
     <ul id="listaTarefas"></ul>
 
     <script src="script.js"></script>
 
 </body>
+
 </html>

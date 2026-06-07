@@ -40,17 +40,19 @@ app.get("/tarefas", async (req, res) => {
 // POST - ADICIONAR TAREFA
 // =========================
 app.post("/tarefas", async (req, res) => {
+    console.log("DADOS RECEBIDOS:");
+    console.log(req.body);
 
     try {
 
-        const { titulo,prioridade  } = req.body;
+        const { titulo,prioridade, dataTarefa  } = req.body;
 
         await sql.query(`
     INSERT INTO tarefas
-    (titulo, concluida, prioridade)
+    (titulo, concluida, prioridade, dataTarefa)
 
     VALUES
-    ('${titulo}', 0, '${prioridade}')
+    ('${titulo}', 0, '${prioridade}', '${dataTarefa}')
 `);
 
         res.json({
@@ -74,6 +76,7 @@ app.post("/tarefas", async (req, res) => {
 // =========================
 app.put("/tarefas/:id", async (req, res) => {
 
+    
     try {
 
         const { id } = req.params;

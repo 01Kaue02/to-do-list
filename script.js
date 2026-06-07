@@ -6,19 +6,54 @@ const botao = document.getElementById("btnAdicionar");
 const lista = document.getElementById("listaTarefas");
 const prioridade = document.getElementById("selectPrioridade");
 
+const total = document.getElementById("total");
+const pendentes = document.getElementById("pendentes");
+const concluidas = document.getElementById("concluidas");
+
 // FILTRO ATUAL
 let filtroAtual = "todas";
+let dataFiltro = "";
+let pesquisa = "";
 
 function mudarFiltro(filtro) {
     filtroAtual = filtro;
     buscarTarefas();
 }
+function filtrarPorData() {
+
+    dataFiltro =
+        document.getElementById("filtroData").value;
+
+    buscarTarefas();
+
+}
+
+function limparFiltroData() {
+
+    dataFiltro = "";
+
+    document.getElementById("filtroData").value = "";
+
+    buscarTarefas();
+
+}
+document
+    .getElementById("pesquisaTarefa")
+    .addEventListener("input", function () {
+
+        pesquisa = this.value.toLowerCase();
+
+        buscarTarefas();
+
+    });
 
 // =========================
 // ADICIONAR TAREFA
 // =========================
 async function adicionarTarefa() {
-
+    const dataTarefa =
+    document.getElementById("dataTarefa").value;
+     console.log("DATA ESCOLHIDA:", dataTarefa);
     const titulo = input.value;
 
     if (!titulo || titulo.trim() === "") {
@@ -35,12 +70,14 @@ async function adicionarTarefa() {
             },
             body: JSON.stringify({
                 titulo: titulo,
-                prioridade: prioridade.value
+                prioridade: prioridade.value,
+                dataTarefa
             })
         });
 
         input.value = "";
         prioridade.value = "Media";
+        document.getElementById("dataTarefa").value = "";
 
         buscarTarefas();
 
@@ -63,6 +100,13 @@ async function buscarTarefas() {
         const resposta = await fetch("http://localhost:3000/tarefas");
 
         const tarefas = await resposta.json();
+        total.textContent = tarefas.length;
+
+pendentes.textContent =
+    tarefas.filter(t => !t.concluida).length;
+
+concluidas.textContent =
+    tarefas.filter(t => t.concluida).length;
 
         renderizar(tarefas);
 
@@ -97,10 +141,53 @@ function renderizar(tarefas) {
         tarefasFiltradas = tarefas;
 
     }
+    if (dataFiltro !== "") {
+
+    tarefasFiltradas =
+        tarefasFiltradas.filter(tarefa => {
+
+            if (!tarefa.dataTarefa) {
+                return false;
+            }
+
+            return tarefa.dataTarefa
+                .split("T")[0] === dataFiltro;
+
+        });
+
+}
+
+// FILTRO DE PESQUISA
+if (pesquisa !== "") {
+
+    tarefasFiltradas =
+        tarefasFiltradas.filter(tarefa =>
+
+            tarefa.titulo
+                .toLowerCase()
+                .includes(pesquisa)
+
+        );
+
+}
+
+    tarefasFiltradas.sort((a, b) => {
+
+    const prioridades = {
+        Alta: 1,
+        Media: 2,
+        Baixa: 3
+    };
+
+    return prioridades[a.prioridade] -
+           prioridades[b.prioridade];
+
+});
 
     tarefasFiltradas.forEach((tarefa) => {
 
         const li = document.createElement("li");
+        li.style.display = "flex";
         if (tarefa.prioridade === "Alta") {
     li.classList.add("prioridade-alta");
 }
@@ -118,17 +205,24 @@ else if (tarefa.prioridade === "Baixa") {
             span.style.textDecoration = "line-through";
         }
 
-        const data = document.createElement("small");
+        const dataCompromisso = document.createElement("small");
 
-        if (tarefa.dataCriacao) {
-            data.textContent =
-                "Criada em: " +
-                new Date(tarefa.dataCriacao)
-                    .toLocaleString("pt-BR");
-        } else {
-            data.textContent = "Sem data";
-        }
-        const prioridadeTexto = document.createElement("small");
+if (tarefa.dataTarefa) {
+
+    dataCompromisso.textContent =
+    " 📅 Para: " +
+    tarefa.dataTarefa.split("T")[0]
+        .split("-")
+        .reverse()
+        .join("/");
+
+} else {
+
+    dataCompromisso.textContent =
+        " 📅 Sem data definida";
+
+} 
+const prioridadeTexto = document.createElement("small");
 
 prioridadeTexto.textContent =
     " Prioridade: " + tarefa.prioridade;
@@ -181,7 +275,8 @@ btnEditar.addEventListener("click", async () => {
             },
             body: JSON.stringify({
                 titulo: novoTitulo,
-                prioridade: prioridade.value
+                prioridade: prioridade.value,
+
             })
         }
     );
@@ -206,15 +301,16 @@ btnExcluir.addEventListener("click", async () => {
 
 });
 
-        li.appendChild(btnCheck);
-        li.appendChild(btnEditar);
-        li.appendChild(span);
-        li.appendChild(prioridadeTexto);
-        li.appendChild(document.createElement("br"));
-        li.appendChild(data);
-        li.appendChild(btnExcluir);
+       li.appendChild(btnCheck);
+li.appendChild(btnEditar);
+li.appendChild(span);
+li.appendChild(prioridadeTexto);
 
-        lista.appendChild(li);
+li.appendChild(document.createElement("br"));
+li.appendChild(dataCompromisso);
+
+li.appendChild(btnExcluir);
+lista.appendChild(li);
 
     });
 
